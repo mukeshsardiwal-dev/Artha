@@ -1,0 +1,23 @@
+frontend/src/types/index.ts
+  28ee5f4c169dc803 40-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.1",
+  "base_commit_sha": "f6c6427e256f538cf0926595217da5b8350e2895",
+  "prompts": {
+    "28ee5f4c169dc803": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "431871",
+        "model": "AUTO"
+      },
+      "human_author": "Mukesh Sardiwal",
+      "messages": [],
+      "total_additions": 2,
+      "total_deletions": 4,
+      "accepted_lines": 2,
+      "overriden_lines": 0
+    }
+  }
+}
