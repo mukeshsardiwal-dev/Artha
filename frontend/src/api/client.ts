@@ -1,12 +1,9 @@
 import axios from 'axios'
+import { API_BASE } from '../lib/utils'
 
-// In dev, Vite proxies /api → localhost:8001
-// In production, set VITE_API_URL=https://your-backend.railway.app
-const baseURL = import.meta.env.VITE_API_URL
-  ? `${import.meta.env.VITE_API_URL}/api/v1`
-  : '/api/v1'
-
-const apiClient = axios.create({ baseURL })
+// In dev, Vite proxies /api → backend (VITE_API_URL blank).
+// In production, set VITE_API_URL=https://your-backend.onrender.com
+const apiClient = axios.create({ baseURL: API_BASE })
 
 apiClient.interceptors.request.use(config => {
   const token = localStorage.getItem('access_token')

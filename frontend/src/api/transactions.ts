@@ -1,4 +1,5 @@
 import apiClient from './client'
+import { API_BASE } from '../lib/utils'
 import type { Transaction } from '../types'
 
 export interface TransactionParams {
@@ -59,5 +60,5 @@ export async function updatePaymentStatus(id: string, payment_status: string): P
 
 export function getInvoicePdfUrl(transactionId: string): string {
   const token = localStorage.getItem('access_token')
-  return `/api/v1/invoices/${transactionId}/pdf?token=${token}`
+  return `${API_BASE}/invoices/${transactionId}/pdf?token=${token}`
 }

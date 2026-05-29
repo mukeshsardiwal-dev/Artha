@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getTransaction } from '../api/transactions'
 import { useAuthStore } from '../stores/authStore'
-import { formatCurrency, formatDate } from '../lib/utils'
+import { formatCurrency, formatDate, API_BASE } from '../lib/utils'
 import Spinner from './ui/Spinner'
 import { X, Download, Share2, CheckCircle2, Clock, AlertCircle, Building2 } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -31,10 +31,7 @@ export default function InvoiceModal({ transactionId, onClose }: Props) {
 
   const fetchPdfBlob = async (): Promise<Blob> => {
     const token = localStorage.getItem('access_token')
-    const base = import.meta.env.VITE_API_URL
-      ? `${import.meta.env.VITE_API_URL}/api/v1`
-      : '/api/v1'
-    const res = await fetch(`${base}/invoices/${transactionId}/pdf`, {
+    const res = await fetch(`${API_BASE}/invoices/${transactionId}/pdf`, {
       headers: { Authorization: `Bearer ${token}` },
     })
     if (!res.ok) throw new Error(`Server error ${res.status}`)

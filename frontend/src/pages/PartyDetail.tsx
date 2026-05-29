@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { getParty, getPartyLedger } from '../api/parties'
-import { today, weekStart, monthStart, quarterStart, formatCurrency, formatDate } from '../lib/utils'
+import { today, weekStart, monthStart, quarterStart, formatCurrency, formatDate, API_BASE } from '../lib/utils'
 import Card from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Badge from '../components/ui/Badge'
@@ -54,10 +54,7 @@ export default function PartyDetail() {
 
   const fetchLedgerBlob = async (): Promise<Blob> => {
     const token = localStorage.getItem('access_token')
-    const base = import.meta.env.VITE_API_URL
-      ? `${import.meta.env.VITE_API_URL}/api/v1`
-      : '/api/v1'
-    const url = `${base}/parties/${id}/ledger/pdf?from_date=${fromDate}&to_date=${toDate}`
+    const url = `${API_BASE}/parties/${id}/ledger/pdf?from_date=${fromDate}&to_date=${toDate}`
     const res = await fetch(url, {
       headers: { Authorization: `Bearer ${token}` },
     })

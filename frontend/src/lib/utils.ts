@@ -4,6 +4,24 @@ export function cn(...inputs: ClassValue[]) {
   return clsx(inputs)
 }
 
+// API origin comes from VITE_API_URL (set in Vercel for prod).
+// Left blank in dev → Vite proxy handles /api and /uploads.
+const API_ORIGIN = import.meta.env.VITE_API_URL ?? ''
+
+// Backend route prefix, overridable via VITE_API_PREFIX (defaults to /api/v1).
+const API_PREFIX = import.meta.env.VITE_API_PREFIX ?? '/api/v1'
+
+// Base URL for all API calls.
+export const API_BASE = `${API_ORIGIN}${API_PREFIX}`
+
+// Resolve a backend asset path (e.g. /uploads/logos/x.png) to a full URL.
+// Passes through absolute URLs and empty values untouched.
+export function assetUrl(path?: string | null): string {
+  if (!path) return ''
+  if (/^https?:\/\//.test(path)) return path
+  return `${API_ORIGIN}${path}`
+}
+
 export function formatCurrency(amount: number | string): string {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',

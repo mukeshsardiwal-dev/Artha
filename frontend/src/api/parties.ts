@@ -1,4 +1,5 @@
 import apiClient from './client'
+import { API_BASE } from '../lib/utils'
 import type { Party, LedgerEntry } from '../types'
 
 export async function getParties(params?: { type?: string; search?: string }): Promise<Party[]> {
@@ -32,6 +33,5 @@ export async function getPartyLedger(id: string, params?: { from_date?: string; 
 
 export function getPartyLedgerPdfUrl(id: string, params: { from_date: string; to_date: string }): string {
   const token = localStorage.getItem('access_token')
-  const base = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/v1` : '/api/v1'
-  return `${base}/parties/${id}/ledger/pdf?from_date=${params.from_date}&to_date=${params.to_date}&token=${token}`
+  return `${API_BASE}/parties/${id}/ledger/pdf?from_date=${params.from_date}&to_date=${params.to_date}&token=${token}`
 }
