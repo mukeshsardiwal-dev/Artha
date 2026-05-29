@@ -6,7 +6,9 @@ export function cn(...inputs: ClassValue[]) {
 
 // API origin comes from VITE_API_URL (set in Vercel for prod).
 // Left blank in dev → Vite proxy handles /api and /uploads.
-const API_ORIGIN = import.meta.env.VITE_API_URL ?? ''
+// Trailing slashes are stripped so joining with the leading-slash prefix
+// never produces a double slash (e.g. "https://host//api/v1" → 404).
+const API_ORIGIN = (import.meta.env.VITE_API_URL ?? '').replace(/\/+$/, '')
 
 // Backend route prefix, overridable via VITE_API_PREFIX (defaults to /api/v1).
 const API_PREFIX = import.meta.env.VITE_API_PREFIX ?? '/api/v1'
