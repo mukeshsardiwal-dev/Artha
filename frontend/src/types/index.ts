@@ -37,9 +37,8 @@ export interface Party {
 export interface Item {
   id: string
   business_id: string
-  name: string
-  name_hindi?: string
-  category?: string
+      name: string
+      category?: string
   unit: string
   hsn_code?: string
   gst_rate: number

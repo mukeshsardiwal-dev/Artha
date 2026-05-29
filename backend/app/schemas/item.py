@@ -46,7 +46,6 @@ class ItemOut(BaseModel):
     id: uuid.UUID
     business_id: uuid.UUID
     name: str
-    name_hindi: str | None
     category: str | None
     unit: str
     hsn_code: str | None
