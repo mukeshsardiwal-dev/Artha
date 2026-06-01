@@ -1,0 +1,47 @@
+mobile/src/screens/parties/PartiesListScreen.tsx
+  44b372dc89646f4c 1,3,9-12,17-55,59-69,71-119,151-157
+mobile/src/screens/purchases/PurchasesListScreen.tsx
+  44b372dc89646f4c 1,3,9-12,17-19,22-33,35-58,60-67,77,79-89,91-124,148-153
+mobile/src/screens/items/ItemsListScreen.tsx
+  44b372dc89646f4c 1,3,9-12,17-45,48-57,59-89,115-120
+mobile/src/screens/auth/SignupScreen.tsx
+  44b372dc89646f4c 43-45
+mobile/src/api/config.ts
+  44b372dc89646f4c 1-11
+mobile/src/api/auth.ts
+  44b372dc89646f4c 1-27
+mobile/src/screens/cashbook/CashbookScreen.tsx
+  44b372dc89646f4c 1-2,5-8,10-16,19-40,42-61,71,78,84-85,90-111,113-134,153-158
+mobile/src/api/types.ts
+  44b372dc89646f4c 1-99
+mobile/src/screens/sales/SalesListScreen.tsx
+  44b372dc89646f4c 1,3,9-12,17-19,22-33,35-58,60-67,80,83-92,94-128,172-176
+mobile/src/screens/auth/LoginScreen.tsx
+  44b372dc89646f4c 33-35
+mobile/src/api/client.ts
+  44b372dc89646f4c 1-86
+mobile/src/api/resources.ts
+  44b372dc89646f4c 1-44
+mobile/src/context/AuthContext.tsx
+  44b372dc89646f4c 1-2,13,23-30,34,37,39-45,48,50-56,60,64-74,76-77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.1",
+  "base_commit_sha": "ed3aa1bd93f297a9a943eeb4943e05fc43aaf330",
+  "prompts": {
+    "44b372dc89646f4c": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "433073",
+        "model": "AUTO"
+      },
+      "human_author": "Mukesh Sardiwal",
+      "messages": [],
+      "total_additions": 834,
+      "total_deletions": 207,
+      "accepted_lines": 834,
+      "overriden_lines": 0
+    }
+  }
+}
