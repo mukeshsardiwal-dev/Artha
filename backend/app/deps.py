@@ -1,9 +1,10 @@
-from fastapi import Depends, HTTPException, status, Query, Request
+from fastapi import Depends, HTTPException, Query, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
+
 from app.config import settings
-from app.models.user import User
 from app.models.business import Business
+from app.models.user import User
 
 # auto_error=False so we can fall back to ?token= query param
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login", auto_error=False)

@@ -1,5 +1,6 @@
-from jinja2 import Environment, BaseLoader
 from decimal import Decimal
+
+from jinja2 import BaseLoader, Environment
 
 INVOICE_TEMPLATE = """
 <!DOCTYPE html>

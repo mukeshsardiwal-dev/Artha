@@ -1,18 +1,20 @@
 from datetime import datetime, timedelta
-from fastapi import APIRouter, HTTPException, status, Depends
+
+from fastapi import APIRouter, Depends, HTTPException, status
 from jose import jwt
 from passlib.context import CryptContext
+
 from app.config import settings
+from app.deps import get_current_user
 from app.models.user import User
 from app.schemas.auth import (
-    RegisterRequest,
-    LoginRequest,
-    TokenResponse,
-    UserOut,
-    UpdateProfileRequest,
     ChangePasswordRequest,
+    LoginRequest,
+    RegisterRequest,
+    TokenResponse,
+    UpdateProfileRequest,
+    UserOut,
 )
-from app.deps import get_current_user
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

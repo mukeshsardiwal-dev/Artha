@@ -1,6 +1,7 @@
-from pydantic import BaseModel
-from datetime import datetime, date
 import uuid
+from datetime import date, datetime
+
+from pydantic import BaseModel
 
 
 class PartyCreate(BaseModel):

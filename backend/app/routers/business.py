@@ -1,24 +1,26 @@
-import os
-import uuid
-import hmac
-import hashlib
-import json
-import urllib.request
-import urllib.error
 import base64
-from datetime import datetime, timedelta, timezone
-from fastapi import APIRouter, HTTPException, Depends, UploadFile, File
-from app.models.user import User
+import hashlib
+import hmac
+import json
+import os
+import urllib.error
+import urllib.request
+import uuid
+from datetime import UTC, datetime, timedelta
+
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+
+from app.config import settings
+from app.deps import get_current_user
 from app.models.business import Business
+from app.models.user import User
 from app.schemas.business import (
     BusinessCreate,
-    BusinessUpdate,
     BusinessOut,
-    SubscriptionOrderRequest,
+    BusinessUpdate,
     PaymentVerifyRequest,
+    SubscriptionOrderRequest,
 )
-from app.deps import get_current_user
-from app.config import settings
 
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "uploads", "logos")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -190,7 +192,7 @@ async def verify_subscription_payment(
         raise HTTPException(status_code=404, detail="Business not found")
 
     months = PLANS[data.plan]["months"]
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     # If still active, extend from current expiry
     base = (
         business.subscription_ends_at
@@ -247,7 +249,7 @@ async def activate_subscription(
         await business.update_from_dict(update).save()
 
     months = PLANS[data.plan]["months"]
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     base = (
         business.subscription_ends_at
         if (business.subscription_ends_at and business.subscription_ends_at > now)
