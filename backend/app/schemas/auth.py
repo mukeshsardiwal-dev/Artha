@@ -1,6 +1,7 @@
-from pydantic import BaseModel, EmailStr
-from datetime import datetime
 import uuid
+from datetime import datetime
+
+from pydantic import BaseModel, EmailStr
 
 
 class RegisterRequest(BaseModel):
@@ -28,7 +29,7 @@ class UserOut(BaseModel):
 
 class TokenResponse(BaseModel):
     access_token: str
-    token_type: str = "bearer"
+    token_type: str = "bearer"  # noqa: S105
     user: UserOut
 
 

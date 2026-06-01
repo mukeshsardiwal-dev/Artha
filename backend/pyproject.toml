@@ -54,6 +54,7 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "migrations/*" = ["ALL"]  # skip generated migration files
+"app/services/pdf_service.py" = ["E501"]  # HTML/CSS template strings have unavoidable long lines
 
 [tool.ruff.format]
 quote-style = "double"

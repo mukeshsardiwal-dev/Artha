@@ -1,8 +1,9 @@
-from fastapi import APIRouter, HTTPException, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
+
+from app.deps import get_current_business
 from app.models.business import Business
 from app.models.item import Item
-from app.schemas.item import ItemCreate, ItemUpdate, ItemOut
-from app.deps import get_current_business
+from app.schemas.item import ItemCreate, ItemOut, ItemUpdate
 
 router = APIRouter(prefix="/items", tags=["items"])
 
@@ -20,7 +21,9 @@ async def list_items(
 
 
 @router.post("", response_model=ItemOut, status_code=201)
-async def create_item(data: ItemCreate, business: Business = Depends(get_current_business)):
+async def create_item(
+    data: ItemCreate, business: Business = Depends(get_current_business)
+):
     item = await Item.create(business_id=business.id, **data.model_dump())
     return ItemOut.model_validate(item)
 
@@ -34,7 +37,9 @@ async def get_item(item_id: str, business: Business = Depends(get_current_busine
 
 
 @router.put("/{item_id}", response_model=ItemOut)
-async def update_item(item_id: str, data: ItemUpdate, business: Business = Depends(get_current_business)):
+async def update_item(
+    item_id: str, data: ItemUpdate, business: Business = Depends(get_current_business)
+):
     item = await Item.get_or_none(id=item_id, business_id=business.id)
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")

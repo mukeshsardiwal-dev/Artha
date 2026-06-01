@@ -1,11 +1,20 @@
 from datetime import datetime, timedelta
-from fastapi import APIRouter, HTTPException, status, Depends
+
+from fastapi import APIRouter, Depends, HTTPException, status
 from jose import jwt
 from passlib.context import CryptContext
+
 from app.config import settings
-from app.models.user import User
-from app.schemas.auth import RegisterRequest, LoginRequest, TokenResponse, UserOut, UpdateProfileRequest, ChangePasswordRequest
 from app.deps import get_current_user
+from app.models.user import User
+from app.schemas.auth import (
+    ChangePasswordRequest,
+    LoginRequest,
+    RegisterRequest,
+    TokenResponse,
+    UpdateProfileRequest,
+    UserOut,
+)
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -13,10 +22,16 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def create_access_token(user_id: str) -> str:
     expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    return jwt.encode({"sub": str(user_id), "exp": expire}, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+    return jwt.encode(
+        {"sub": str(user_id), "exp": expire},
+        settings.SECRET_KEY,
+        algorithm=settings.ALGORITHM,
+    )
 
 
-@router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED
+)
 async def register(data: RegisterRequest):
     if await User.filter(email=data.email).exists():
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -45,10 +60,14 @@ async def get_me(current_user: User = Depends(get_current_user)):
 
 
 @router.put("/me", response_model=UserOut)
-async def update_profile(data: UpdateProfileRequest, current_user: User = Depends(get_current_user)):
+async def update_profile(
+    data: UpdateProfileRequest, current_user: User = Depends(get_current_user)
+):
     if data.email and data.email != current_user.email:
         if await User.filter(email=data.email).exclude(id=current_user.id).exists():
-            raise HTTPException(status_code=400, detail="Email already in use by another account")
+            raise HTTPException(
+                status_code=400, detail="Email already in use by another account"
+            )
         current_user.email = data.email
     if data.full_name is not None:
         if not data.full_name.strip():
@@ -61,13 +80,20 @@ async def update_profile(data: UpdateProfileRequest, current_user: User = Depend
 
 
 @router.put("/me/password", response_model=UserOut)
-async def change_password(data: ChangePasswordRequest, current_user: User = Depends(get_current_user)):
+async def change_password(
+    data: ChangePasswordRequest, current_user: User = Depends(get_current_user)
+):
     if not pwd_context.verify(data.current_password, current_user.hashed_password):
         raise HTTPException(status_code=400, detail="Current password is incorrect")
     if len(data.new_password) < 6:
-        raise HTTPException(status_code=400, detail="New password must be at least 6 characters")
+        raise HTTPException(
+            status_code=400, detail="New password must be at least 6 characters"
+        )
     if data.current_password == data.new_password:
-        raise HTTPException(status_code=400, detail="New password must be different from the current one")
+        raise HTTPException(
+            status_code=400,
+            detail="New password must be different from the current one",
+        )
     current_user.hashed_password = pwd_context.hash(data.new_password)
     await current_user.save()
     return UserOut.model_validate(current_user)

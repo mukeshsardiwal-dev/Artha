@@ -1,27 +1,37 @@
-from fastapi import APIRouter, HTTPException, Depends, Query
-from app.models.business import Business
-from app.models.party import Party
-from app.models.item import Item
-from app.models.transaction import Transaction, TransactionLineItem
-from app.models.cashbook import CashbookEntry
-from app.schemas.transaction import TransactionCreate, TransactionUpdate, TransactionOut, LineItemOut
-from app.schemas.party import PartyOut
-from app.deps import get_current_business
-from app.services.gst import process_line_items
-from decimal import Decimal
 from datetime import date
+
+from fastapi import APIRouter, Depends, HTTPException, Query
+
+from app.deps import get_current_business
+from app.models.business import Business
+from app.models.cashbook import CashbookEntry
+from app.models.party import Party
+from app.models.transaction import Transaction, TransactionLineItem
+from app.schemas.party import PartyOut
+from app.schemas.transaction import (
+    LineItemOut,
+    TransactionCreate,
+    TransactionOut,
+    TransactionUpdate,
+)
+from app.services.gst import process_line_items
 
 router = APIRouter(prefix="/transactions", tags=["transactions"])
 
 
 async def _next_invoice_number(business_id) -> str:
     from datetime import datetime
+
     year = datetime.utcnow().year
-    last = await Transaction.filter(
-        business_id=business_id,
-        type="sale",
-        invoice_number__not_isnull=True,
-    ).order_by("-created_at").first()
+    last = (
+        await Transaction.filter(
+            business_id=business_id,
+            type="sale",
+            invoice_number__not_isnull=True,
+        )
+        .order_by("-created_at")
+        .first()
+    )
     if last and last.invoice_number:
         try:
             seq = int(last.invoice_number.split("-")[-1]) + 1
@@ -82,7 +92,9 @@ async def list_transactions(
 
 
 @router.post("", response_model=TransactionOut, status_code=201)
-async def create_transaction(data: TransactionCreate, business: Business = Depends(get_current_business)):
+async def create_transaction(
+    data: TransactionCreate, business: Business = Depends(get_current_business)
+):
     buyer_state = None
     if data.party_id:
         party = await Party.get_or_none(id=str(data.party_id), business_id=business.id)
@@ -146,7 +158,9 @@ async def create_transaction(data: TransactionCreate, business: Business = Depen
 
 
 @router.get("/{txn_id}", response_model=TransactionOut)
-async def get_transaction(txn_id: str, business: Business = Depends(get_current_business)):
+async def get_transaction(
+    txn_id: str, business: Business = Depends(get_current_business)
+):
     txn = await Transaction.get_or_none(id=txn_id, business_id=business.id)
     if not txn:
         raise HTTPException(status_code=404, detail="Transaction not found")
@@ -154,7 +168,11 @@ async def get_transaction(txn_id: str, business: Business = Depends(get_current_
 
 
 @router.put("/{txn_id}", response_model=TransactionOut)
-async def update_transaction(txn_id: str, data: TransactionUpdate, business: Business = Depends(get_current_business)):
+async def update_transaction(
+    txn_id: str,
+    data: TransactionUpdate,
+    business: Business = Depends(get_current_business),
+):
     txn = await Transaction.get_or_none(id=txn_id, business_id=business.id)
     if not txn:
         raise HTTPException(status_code=404, detail="Transaction not found")
@@ -164,7 +182,9 @@ async def update_transaction(txn_id: str, data: TransactionUpdate, business: Bus
 
 
 @router.delete("/{txn_id}", status_code=204)
-async def delete_transaction(txn_id: str, business: Business = Depends(get_current_business)):
+async def delete_transaction(
+    txn_id: str, business: Business = Depends(get_current_business)
+):
     txn = await Transaction.get_or_none(id=txn_id, business_id=business.id)
     if not txn:
         raise HTTPException(status_code=404, detail="Transaction not found")

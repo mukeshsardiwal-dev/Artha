@@ -1,10 +1,17 @@
-from fastapi import APIRouter, HTTPException, Depends, Query
+from datetime import date
+from decimal import Decimal
+
+from fastapi import APIRouter, Depends, HTTPException, Query
+
+from app.deps import get_current_business
 from app.models.business import Business
 from app.models.cashbook import CashbookEntry
-from app.schemas.cashbook import CashbookEntryCreate, CashbookEntryUpdate, CashbookEntryOut, CashbookBalance
-from app.deps import get_current_business
-from decimal import Decimal
-from datetime import date
+from app.schemas.cashbook import (
+    CashbookBalance,
+    CashbookEntryCreate,
+    CashbookEntryOut,
+    CashbookEntryUpdate,
+)
 
 router = APIRouter(prefix="/cashbook", tags=["cashbook"])
 
@@ -27,7 +34,9 @@ async def list_entries(
 @router.get("/balance", response_model=CashbookBalance)
 async def get_balance(business: Business = Depends(get_current_business)):
     entries = await CashbookEntry.filter(business_id=business.id).all()
-    opening = sum(Decimal(str(e.amount)) for e in entries if e.type == "opening_balance")
+    opening = sum(
+        Decimal(str(e.amount)) for e in entries if e.type == "opening_balance"
+    )
     receipts = sum(Decimal(str(e.amount)) for e in entries if e.type == "receipt")
     payments = sum(Decimal(str(e.amount)) for e in entries if e.type == "payment")
     return CashbookBalance(
@@ -39,7 +48,9 @@ async def get_balance(business: Business = Depends(get_current_business)):
 
 
 @router.post("/entries", response_model=CashbookEntryOut, status_code=201)
-async def create_entry(data: CashbookEntryCreate, business: Business = Depends(get_current_business)):
+async def create_entry(
+    data: CashbookEntryCreate, business: Business = Depends(get_current_business)
+):
     entry = await CashbookEntry.create(
         business_id=business.id,
         party_id=str(data.party_id) if data.party_id else None,
@@ -49,7 +60,11 @@ async def create_entry(data: CashbookEntryCreate, business: Business = Depends(g
 
 
 @router.put("/entries/{entry_id}", response_model=CashbookEntryOut)
-async def update_entry(entry_id: str, data: CashbookEntryUpdate, business: Business = Depends(get_current_business)):
+async def update_entry(
+    entry_id: str,
+    data: CashbookEntryUpdate,
+    business: Business = Depends(get_current_business),
+):
     entry = await CashbookEntry.get_or_none(id=entry_id, business_id=business.id)
     if not entry:
         raise HTTPException(status_code=404, detail="Entry not found")
@@ -59,7 +74,9 @@ async def update_entry(entry_id: str, data: CashbookEntryUpdate, business: Busin
 
 
 @router.delete("/entries/{entry_id}", status_code=204)
-async def delete_entry(entry_id: str, business: Business = Depends(get_current_business)):
+async def delete_entry(
+    entry_id: str, business: Business = Depends(get_current_business)
+):
     entry = await CashbookEntry.get_or_none(id=entry_id, business_id=business.id)
     if not entry:
         raise HTTPException(status_code=404, detail="Entry not found")
