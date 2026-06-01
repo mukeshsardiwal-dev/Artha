@@ -1,0 +1,33 @@
+backend/app/routers/business.py
+  8ee56b69785410fe 61,65,69,216-220
+backend/app/deps.py
+  8ee56b69785410fe 33-34
+backend/app/config.py
+  8ee56b69785410fe 6,10
+backend/app/services/pdf_service.py
+  8ee56b69785410fe 138,285
+backend/pyproject.toml
+  8ee56b69785410fe 57
+backend/app/schemas/auth.py
+  8ee56b69785410fe 32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.1",
+  "base_commit_sha": "4be65a4aa1388174f653dc5c96493f85cc6313d3",
+  "prompts": {
+    "8ee56b69785410fe": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "433728",
+        "model": "AUTO"
+      },
+      "human_author": "Mukesh Sardiwal",
+      "messages": [],
+      "total_additions": 19,
+      "total_deletions": 14,
+      "accepted_lines": 16,
+      "overriden_lines": 0
+    }
+  }
+}
