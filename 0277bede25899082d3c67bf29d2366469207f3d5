@@ -1,0 +1,75 @@
+mobile/src/screens/auth/LoginScreen.tsx
+  6dd000128dd0c1c2 1-232
+mobile/src/screens/sales/AddSaleScreen.tsx
+  6dd000128dd0c1c2 1-138
+mobile/package.json
+  6dd000128dd0c1c2 6,11,14-20,23-24
+mobile/src/screens/more/MoreHomeScreen.tsx
+  6dd000128dd0c1c2 1-74
+mobile/src/screens/cashbook/CashbookScreen.tsx
+  6dd000128dd0c1c2 1-82
+mobile/src/screens/parties/PartiesListScreen.tsx
+  6dd000128dd0c1c2 1-82
+mobile/src/screens/parties/AddPartyScreen.tsx
+  6dd000128dd0c1c2 1-101
+mobile/src/screens/dashboard/DashboardScreen.tsx
+  6dd000128dd0c1c2 1-218
+mobile/src/context/AuthContext.tsx
+  6dd000128dd0c1c2 1-71
+mobile/src/navigation/AuthStack.tsx
+  6dd000128dd0c1c2 1-23
+mobile/src/navigation/types.ts
+  6dd000128dd0c1c2 1-43
+mobile/src/navigation/MoreStack.tsx
+  6dd000128dd0c1c2 1-34
+mobile/src/navigation/TabStacks.tsx
+  6dd000128dd0c1c2 1-56
+mobile/src/screens/sales/SalesListScreen.tsx
+  6dd000128dd0c1c2 1-117
+mobile/src/data/dummyData.ts
+  6dd000128dd0c1c2 1-71
+mobile/src/screens/auth/SignupScreen.tsx
+  6dd000128dd0c1c2 1-144
+mobile/src/navigation/AppTabs.tsx
+  6dd000128dd0c1c2 1-72
+mobile/src/screens/purchases/AddPurchaseScreen.tsx
+  6dd000128dd0c1c2 1-85
+mobile/src/screens/reports/ReportsScreen.tsx
+  6dd000128dd0c1c2 1-84
+mobile/src/navigation/RootNavigator.tsx
+  6dd000128dd0c1c2 1-29
+mobile/src/screens/items/ItemsListScreen.tsx
+  6dd000128dd0c1c2 1-69
+mobile/src/screens/items/AddItemScreen.tsx
+  6dd000128dd0c1c2 1-97
+mobile/App.tsx
+  6dd000128dd0c1c2 1-3,5-8,12-14,16-19
+mobile/src/screens/settings/SettingsScreen.tsx
+  6dd000128dd0c1c2 1-176
+mobile/src/screens/purchases/PurchasesListScreen.tsx
+  6dd000128dd0c1c2 1-81
+mobile/src/theme/index.ts
+  6dd000128dd0c1c2 1-83
+mobile/app.json
+  6dd000128dd0c1c2 3-4,8-14,16-17,21,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.1",
+  "base_commit_sha": "0277bede25899082d3c67bf29d2366469207f3d5",
+  "prompts": {
+    "6dd000128dd0c1c2": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "432003",
+        "model": "AUTO"
+      },
+      "human_author": "Mukesh Sardiwal",
+      "messages": [],
+      "total_additions": 2307,
+      "total_deletions": 36,
+      "accepted_lines": 2300,
+      "overriden_lines": 0
+    }
+  }
+}
