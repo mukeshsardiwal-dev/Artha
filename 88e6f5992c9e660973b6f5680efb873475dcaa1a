@@ -1,0 +1,23 @@
+backend/app/routers/business.py
+  8ee56b69785410fe 61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.1",
+  "base_commit_sha": "88e6f5992c9e660973b6f5680efb873475dcaa1a",
+  "prompts": {
+    "8ee56b69785410fe": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "433728",
+        "model": "AUTO"
+      },
+      "human_author": "Mukesh Sardiwal",
+      "messages": [],
+      "total_additions": 1,
+      "total_deletions": 1,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    }
+  }
+}
