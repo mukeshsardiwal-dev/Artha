@@ -40,9 +40,9 @@ export default function SignupScreen({ navigation }: Props) {
     }
     setError('');
     try {
-      await signup(name, email, password);
-    } catch {
-      setError('Failed to create account. Try again.');
+      await signup(name.trim(), email.trim(), password);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to create account. Try again.');
     }
   };
 

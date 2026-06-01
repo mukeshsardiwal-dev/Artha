@@ -30,9 +30,9 @@ export default function LoginScreen({ navigation }: Props) {
     }
     setError('');
     try {
-      await login(email, password);
-    } catch {
-      setError('Invalid credentials. Try again.');
+      await login(email.trim(), password);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Invalid credentials. Try again.');
     }
   };
 
