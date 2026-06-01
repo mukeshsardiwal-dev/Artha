@@ -58,7 +58,7 @@ def _razorpay_create_order(amount: int, receipt: str) -> dict:
         method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=10) as resp:  # noqa: S310
+        with urllib.request.urlopen(req, timeout=10) as resp:  # noqa: S310  # nosec B310
             return json.loads(resp.read())
     except urllib.error.HTTPError as e:
         body = e.read().decode()
