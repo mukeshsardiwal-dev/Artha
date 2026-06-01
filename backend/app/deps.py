@@ -23,7 +23,9 @@ async def get_current_user(
     if not token:
         raise credentials_exc
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        payload = jwt.decode(
+            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+        )
         user_id: str = payload.get("sub")
         if user_id is None:
             raise credentials_exc
@@ -36,7 +38,9 @@ async def get_current_user(
     return user
 
 
-async def get_current_business(current_user: User = Depends(get_current_user)) -> Business:
+async def get_current_business(
+    current_user: User = Depends(get_current_user),
+) -> Business:
     business = await Business.filter(user_id=current_user.id).first()
     if business is None:
         raise HTTPException(

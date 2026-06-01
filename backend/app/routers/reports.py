@@ -15,21 +15,31 @@ async def daily_report(
     report_date: date = Query(default_factory=date.today, alias="date"),
     business: Business = Depends(get_current_business),
 ):
-    sales = await Transaction.filter(business_id=business.id, type="sale", transaction_date=report_date).all()
-    purchases = await Transaction.filter(business_id=business.id, type="purchase", transaction_date=report_date).all()
+    sales = await Transaction.filter(
+        business_id=business.id, type="sale", transaction_date=report_date
+    ).all()
+    purchases = await Transaction.filter(
+        business_id=business.id, type="purchase", transaction_date=report_date
+    ).all()
 
     total_sales = sum(Decimal(str(t.total_amount)) for t in sales)
     total_purchases = sum(Decimal(str(t.total_amount)) for t in purchases)
     gross_profit = total_sales - total_purchases
 
     cb_entries = await CashbookEntry.filter(business_id=business.id).all()
-    opening = sum(Decimal(str(e.amount)) for e in cb_entries if e.type == "opening_balance")
+    opening = sum(
+        Decimal(str(e.amount)) for e in cb_entries if e.type == "opening_balance"
+    )
     receipts = sum(Decimal(str(e.amount)) for e in cb_entries if e.type == "receipt")
     payments = sum(Decimal(str(e.amount)) for e in cb_entries if e.type == "payment")
     cash_in_hand = opening + receipts - payments
 
-    unpaid_sales = await Transaction.filter(business_id=business.id, type="sale", payment_status="unpaid").all()
-    unpaid_purchases = await Transaction.filter(business_id=business.id, type="purchase", payment_status="unpaid").all()
+    unpaid_sales = await Transaction.filter(
+        business_id=business.id, type="sale", payment_status="unpaid"
+    ).all()
+    unpaid_purchases = await Transaction.filter(
+        business_id=business.id, type="purchase", payment_status="unpaid"
+    ).all()
     outstanding_receivable = sum(Decimal(str(t.total_amount)) for t in unpaid_sales)
     outstanding_payable = sum(Decimal(str(t.total_amount)) for t in unpaid_purchases)
 
@@ -38,7 +48,9 @@ async def daily_report(
     for t in sales:
         line_items = await TransactionLineItem.filter(transaction_id=t.id).all()
         for li in line_items:
-            item_totals[li.item_name] = item_totals.get(li.item_name, Decimal("0")) + Decimal(str(li.amount))
+            item_totals[li.item_name] = item_totals.get(
+                li.item_name, Decimal("0")
+            ) + Decimal(str(li.amount))
 
     sorted_items = sorted(item_totals.items(), key=lambda x: x[1], reverse=True)[:5]
     top_total = sum(v for _, v in sorted_items) or Decimal("1")
@@ -65,8 +77,18 @@ async def gst_summary(
     to_date: date = Query(...),
     business: Business = Depends(get_current_business),
 ):
-    sales = await Transaction.filter(business_id=business.id, type="sale", transaction_date__gte=from_date, transaction_date__lte=to_date).all()
-    purchases = await Transaction.filter(business_id=business.id, type="purchase", transaction_date__gte=from_date, transaction_date__lte=to_date).all()
+    sales = await Transaction.filter(
+        business_id=business.id,
+        type="sale",
+        transaction_date__gte=from_date,
+        transaction_date__lte=to_date,
+    ).all()
+    purchases = await Transaction.filter(
+        business_id=business.id,
+        type="purchase",
+        transaction_date__gte=from_date,
+        transaction_date__lte=to_date,
+    ).all()
 
     async def aggregate_gst(txns):
         taxable = cgst = sgst = igst = Decimal("0")
@@ -109,22 +131,43 @@ async def party_wise_report(
     business: Business = Depends(get_current_business),
 ):
     from app.models.party import Party
+
     parties = await Party.filter(business_id=business.id, is_active=True).all()
     result = []
     for party in parties:
-        sales = await Transaction.filter(business_id=business.id, party_id=party.id, type="sale", transaction_date__gte=from_date, transaction_date__lte=to_date).all()
-        purchases = await Transaction.filter(business_id=business.id, party_id=party.id, type="purchase", transaction_date__gte=from_date, transaction_date__lte=to_date).all()
+        sales = await Transaction.filter(
+            business_id=business.id,
+            party_id=party.id,
+            type="sale",
+            transaction_date__gte=from_date,
+            transaction_date__lte=to_date,
+        ).all()
+        purchases = await Transaction.filter(
+            business_id=business.id,
+            party_id=party.id,
+            type="purchase",
+            transaction_date__gte=from_date,
+            transaction_date__lte=to_date,
+        ).all()
         total_sales = sum(Decimal(str(t.total_amount)) for t in sales)
         total_purchases = sum(Decimal(str(t.total_amount)) for t in purchases)
-        unpaid_sales = sum(Decimal(str(t.total_amount)) for t in sales if t.payment_status != "paid")
-        unpaid_purchases = sum(Decimal(str(t.total_amount)) for t in purchases if t.payment_status != "paid")
+        unpaid_sales = sum(
+            Decimal(str(t.total_amount)) for t in sales if t.payment_status != "paid"
+        )
+        unpaid_purchases = sum(
+            Decimal(str(t.total_amount))
+            for t in purchases
+            if t.payment_status != "paid"
+        )
         outstanding = unpaid_sales - unpaid_purchases
         if total_sales or total_purchases:
-            result.append(PartyWiseStat(
-                party_id=str(party.id),
-                party_name=party.name,
-                total_sales=total_sales,
-                total_purchases=total_purchases,
-                outstanding=outstanding,
-            ))
+            result.append(
+                PartyWiseStat(
+                    party_id=str(party.id),
+                    party_name=party.name,
+                    total_sales=total_sales,
+                    total_purchases=total_purchases,
+                    outstanding=outstanding,
+                )
+            )
     return result

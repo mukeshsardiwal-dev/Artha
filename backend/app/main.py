@@ -6,7 +6,16 @@ from fastapi.staticfiles import StaticFiles
 from tortoise.contrib.fastapi import RegisterTortoise
 from app.config import TORTOISE_ORM
 from app.config import settings
-from app.routers import auth, business, parties, items, transactions, cashbook, invoices, reports
+from app.routers import (
+    auth,
+    business,
+    parties,
+    items,
+    transactions,
+    cashbook,
+    invoices,
+    reports,
+)
 
 UPLOADS_DIR = os.path.join(os.path.dirname(__file__), "..", "uploads")
 os.makedirs(UPLOADS_DIR, exist_ok=True)

@@ -29,21 +29,27 @@ async def list_parties(
 
 
 @router.post("", response_model=PartyOut, status_code=201)
-async def create_party(data: PartyCreate, business: Business = Depends(get_current_business)):
+async def create_party(
+    data: PartyCreate, business: Business = Depends(get_current_business)
+):
     party = await Party.create(business_id=business.id, **data.model_dump())
     return PartyOut.model_validate(party)
 
 
 @router.get("/{party_id}", response_model=PartyOut)
 async def get_party(party_id: str, business: Business = Depends(get_current_business)):
-    party = await Party.get_or_none(id=party_id, business_id=business.id, is_active=True)
+    party = await Party.get_or_none(
+        id=party_id, business_id=business.id, is_active=True
+    )
     if not party:
         raise HTTPException(status_code=404, detail="Party not found")
     return PartyOut.model_validate(party)
 
 
 @router.put("/{party_id}", response_model=PartyOut)
-async def update_party(party_id: str, data: PartyUpdate, business: Business = Depends(get_current_business)):
+async def update_party(
+    party_id: str, data: PartyUpdate, business: Business = Depends(get_current_business)
+):
     party = await Party.get_or_none(id=party_id, business_id=business.id)
     if not party:
         raise HTTPException(status_code=404, detail="Party not found")
@@ -53,7 +59,9 @@ async def update_party(party_id: str, data: PartyUpdate, business: Business = De
 
 
 @router.delete("/{party_id}", status_code=204)
-async def delete_party(party_id: str, business: Business = Depends(get_current_business)):
+async def delete_party(
+    party_id: str, business: Business = Depends(get_current_business)
+):
     party = await Party.get_or_none(id=party_id, business_id=business.id)
     if not party:
         raise HTTPException(status_code=404, detail="Party not found")
@@ -87,24 +95,30 @@ async def get_ledger(
     entries = []
     for t in transactions:
         # For customer: sale = debit (they owe us), purchase = credit (we owe them)
-        is_debit = (party.type == "customer" and t.type == "sale") or (party.type == "supplier" and t.type == "purchase")
-        entries.append({
-            "date": t.transaction_date,
-            "description": f"{t.type.title()} — {t.invoice_number or t.id}",
-            "amount": float(t.total_amount),
-            "entry_type": "debit" if is_debit else "credit",
-            "transaction_id": t.id,
-        })
+        is_debit = (party.type == "customer" and t.type == "sale") or (
+            party.type == "supplier" and t.type == "purchase"
+        )
+        entries.append(
+            {
+                "date": t.transaction_date,
+                "description": f"{t.type.title()} — {t.invoice_number or t.id}",
+                "amount": float(t.total_amount),
+                "entry_type": "debit" if is_debit else "credit",
+                "transaction_id": t.id,
+            }
+        )
 
     for cb in cashbook:
         is_credit = cb.type == "receipt"
-        entries.append({
-            "date": cb.entry_date,
-            "description": cb.description,
-            "amount": float(cb.amount),
-            "entry_type": "credit" if is_credit else "debit",
-            "transaction_id": None,
-        })
+        entries.append(
+            {
+                "date": cb.entry_date,
+                "description": cb.description,
+                "amount": float(cb.amount),
+                "entry_type": "credit" if is_credit else "debit",
+                "transaction_id": None,
+            }
+        )
 
     entries.sort(key=lambda x: x["date"])
 
@@ -113,14 +127,16 @@ async def get_ledger(
     for e in entries:
         amt = Decimal(str(e["amount"]))
         balance += amt if e["entry_type"] == "debit" else -amt
-        result.append(LedgerEntry(
-            date=e["date"],
-            description=e["description"],
-            amount=e["amount"],
-            entry_type=e["entry_type"],
-            balance=float(balance),
-            transaction_id=e["transaction_id"],
-        ))
+        result.append(
+            LedgerEntry(
+                date=e["date"],
+                description=e["description"],
+                amount=e["amount"],
+                entry_type=e["entry_type"],
+                balance=float(balance),
+                transaction_id=e["transaction_id"],
+            )
+        )
     return result
 
 
@@ -150,10 +166,26 @@ async def get_ledger_pdf(
 
     raw = []
     for t in transactions:
-        is_debit = (party.type == "customer" and t.type == "sale") or (party.type == "supplier" and t.type == "purchase")
-        raw.append({"date": t.transaction_date, "description": f"{t.type.title()} — {t.invoice_number or t.id}", "amount": float(t.total_amount), "entry_type": "debit" if is_debit else "credit"})
+        is_debit = (party.type == "customer" and t.type == "sale") or (
+            party.type == "supplier" and t.type == "purchase"
+        )
+        raw.append(
+            {
+                "date": t.transaction_date,
+                "description": f"{t.type.title()} — {t.invoice_number or t.id}",
+                "amount": float(t.total_amount),
+                "entry_type": "debit" if is_debit else "credit",
+            }
+        )
     for cb in cashbook:
-        raw.append({"date": cb.entry_date, "description": cb.description, "amount": float(cb.amount), "entry_type": "credit" if cb.type == "receipt" else "debit"})
+        raw.append(
+            {
+                "date": cb.entry_date,
+                "description": cb.description,
+                "amount": float(cb.amount),
+                "entry_type": "credit" if cb.type == "receipt" else "debit",
+            }
+        )
 
     raw.sort(key=lambda x: x["date"])
     balance = Decimal("0")
@@ -164,7 +196,9 @@ async def get_ledger_pdf(
         entries.append({**e, "date": str(e["date"]), "balance": float(balance)})
 
     pdf_bytes = await generate_ledger_pdf(
-        party, business, entries,
+        party,
+        business,
+        entries,
         from_date=str(from_date) if from_date else "—",
         to_date=str(to_date) if to_date else "—",
     )

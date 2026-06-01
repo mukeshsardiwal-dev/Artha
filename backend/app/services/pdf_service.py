@@ -155,6 +155,7 @@ def generate_invoice_html(transaction, business, party, line_items) -> str:
 async def generate_invoice_pdf(transaction, business, party, line_items) -> bytes:
     try:
         import weasyprint
+
         html = generate_invoice_html(transaction, business, party, line_items)
         return weasyprint.HTML(string=html).write_pdf()
     except ImportError:
@@ -275,8 +276,11 @@ LEDGER_TEMPLATE = """
 """
 
 
-def generate_ledger_html(party, business, entries: list, from_date: str, to_date: str) -> str:
+def generate_ledger_html(
+    party, business, entries: list, from_date: str, to_date: str
+) -> str:
     from datetime import date as date_cls
+
     env = Environment(loader=BaseLoader())
     template = env.from_string(LEDGER_TEMPLATE)
     net_balance = entries[-1]["balance"] if entries else 0
@@ -295,10 +299,13 @@ def generate_ledger_html(party, business, entries: list, from_date: str, to_date
     )
 
 
-async def generate_ledger_pdf(party, business, entries: list, from_date: str, to_date: str) -> bytes:
+async def generate_ledger_pdf(
+    party, business, entries: list, from_date: str, to_date: str
+) -> bytes:
     html = generate_ledger_html(party, business, entries, from_date, to_date)
     try:
         import weasyprint
+
         return weasyprint.HTML(string=html).write_pdf()
     except ImportError:
         return html.encode("utf-8")

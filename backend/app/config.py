@@ -17,7 +17,9 @@ class Settings(BaseSettings):
     def origins_list(self) -> list[str]:
         # Browsers send the Origin header without a trailing slash, so strip any
         # trailing slashes here to keep CMS matching exact regardless of config.
-        return [o.strip().rstrip("/") for o in self.ALLOWED_ORIGINS.split(",") if o.strip()]
+        return [
+            o.strip().rstrip("/") for o in self.ALLOWED_ORIGINS.split(",") if o.strip()
+        ]
 
 
 settings = Settings()

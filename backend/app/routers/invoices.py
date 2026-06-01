@@ -10,7 +10,9 @@ router = APIRouter(prefix="/invoices", tags=["invoices"])
 
 
 @router.get("/{txn_id}/pdf")
-async def get_invoice_pdf(txn_id: str, business: Business = Depends(get_current_business)):
+async def get_invoice_pdf(
+    txn_id: str, business: Business = Depends(get_current_business)
+):
     txn = await Transaction.get_or_none(id=txn_id, business_id=business.id)
     if not txn:
         raise HTTPException(status_code=404, detail="Transaction not found")
