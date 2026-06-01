@@ -58,15 +58,15 @@ def _razorpay_create_order(amount: int, receipt: str) -> dict:
         method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        with urllib.request.urlopen(req, timeout=10) as resp:  # noqa: S310
             return json.loads(resp.read())
     except urllib.error.HTTPError as e:
         body = e.read().decode()
-        raise HTTPException(status_code=502, detail=f"Razorpay error: {body}")
+        raise HTTPException(status_code=502, detail=f"Razorpay error: {body}") from e
     except Exception as e:
         raise HTTPException(
             status_code=502, detail=f"Payment gateway unreachable: {str(e)}"
-        )
+        ) from e
 
 
 def _verify_signature(order_id: str, payment_id: str, signature: str) -> bool:
@@ -213,7 +213,11 @@ async def activate_subscription(
     data: SubscriptionOrderRequest,
     current_user: User = Depends(get_current_user),
 ):
-    """Direct activation without payment — used during development / before Razorpay is wired."""
+    """
+    Direct activation without payment.
+
+    Used during development / before Razorpay is wired.
+    """
     if data.plan not in PLANS:
         raise HTTPException(
             status_code=400, detail="Invalid plan. Choose 3m, 6m or 12m."

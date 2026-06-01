@@ -30,8 +30,8 @@ async def get_current_user(
         user_id: str = payload.get("sub")
         if user_id is None:
             raise credentials_exc
-    except JWTError:
-        raise credentials_exc
+    except JWTError as err:
+        raise credentials_exc from err
 
     user = await User.get_or_none(id=user_id)
     if user is None:

@@ -135,7 +135,7 @@ INVOICE_TEMPLATE = """
 
 
 def generate_invoice_html(transaction, business, party, line_items) -> str:
-    env = Environment(loader=BaseLoader())
+    env = Environment(loader=BaseLoader(), autoescape=True)
     template = env.from_string(INVOICE_TEMPLATE)
 
     cgst_total = float(sum(Decimal(str(li.cgst)) for li in line_items))
@@ -282,7 +282,7 @@ def generate_ledger_html(
 ) -> str:
     from datetime import date as date_cls
 
-    env = Environment(loader=BaseLoader())
+    env = Environment(loader=BaseLoader(), autoescape=True)
     template = env.from_string(LEDGER_TEMPLATE)
     net_balance = entries[-1]["balance"] if entries else 0
     total_debit = sum(e["amount"] for e in entries if e["entry_type"] == "debit")
