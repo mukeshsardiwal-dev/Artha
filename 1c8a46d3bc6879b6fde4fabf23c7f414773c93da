@@ -1,0 +1,25 @@
+backend/pyproject.toml
+  33b7799db4ac799f 29-64
+.github/workflows/docker-image.yml
+  33b7799db4ac799f 1-31,33-77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.1",
+  "base_commit_sha": "1c8a46d3bc6879b6fde4fabf23c7f414773c93da",
+  "prompts": {
+    "33b7799db4ac799f": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "433717",
+        "model": "AUTO"
+      },
+      "human_author": "Mukesh Sardiwal",
+      "messages": [],
+      "total_additions": 115,
+      "total_deletions": 2,
+      "accepted_lines": 112,
+      "overriden_lines": 2
+    }
+  }
+}
