@@ -8,7 +8,6 @@ FastAPI instance). Configure via environment variables:
 
     OTEL_SERVICE_NAME               Service name shown in your tracing backend
     OTEL_EXPORTER_OTLP_ENDPOINT     OTLP HTTP endpoint (e.g. Grafana Cloud, Honeycomb)
-    OTEL_EXPORTER_OTLP_HEADERS      Comma-separated auth headers: "Key=Value,Key2=Value2"
     OTEL_CONSOLE                    "true" → also print spans to stdout (dev)
 """
 
