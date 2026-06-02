@@ -1,0 +1,33 @@
+backend/requirements.txt
+  542a6a48e5056f9a 13-19
+backend/app/config.py
+  542a6a48e5056f9a 14-28
+backend/app/main.py
+  542a6a48e5056f9a 7,21,26-34,55-57
+backend/pyproject.toml
+  542a6a48e5056f9a 21-26
+backend/app/telemetry.py
+  542a6a48e5056f9a 1-125
+backend/.env.example
+  542a6a48e5056f9a 11-28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.1",
+  "base_commit_sha": "4b2d7952c4373134ebfec06a4c5bafd27363b83f",
+  "prompts": {
+    "542a6a48e5056f9a": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "433778",
+        "model": "AUTO"
+      },
+      "human_author": "Mukesh Sardiwal",
+      "messages": [],
+      "total_additions": 187,
+      "total_deletions": 0,
+      "accepted_lines": 187,
+      "overriden_lines": 0
+    }
+  }
+}
