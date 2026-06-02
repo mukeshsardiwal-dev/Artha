@@ -11,6 +11,21 @@ class Settings(BaseSettings):
     # Comma-separated list of allowed frontend origins
     ALLOWED_ORIGINS: str = "http://localhost:5173,http://localhost:3000"
 
+    # ── OpenTelemetry ──────────────────────────────────────────────────────
+    # Name shown in your tracing backend (Grafana, Honeycomb, SigNoz, etc.)
+    OTEL_SERVICE_NAME: str = "artha-api"
+    # OTLP HTTP endpoint — leave empty to disable remote export
+    # Examples:
+    #   Grafana Cloud : https://otlp-gateway-prod-us-east-0.grafana.net/otlp
+    #   Honeycomb     : https://api.honeycomb.io
+    #   SigNoz Cloud  : https://ingest.us.signoz.cloud:443
+    OTEL_EXPORTER_OTLP_ENDPOINT: str | None = None
+    # Comma-separated auth headers: "Authorization=Basic <token>"
+    # or "x-honeycomb-team=<api-key>"
+    OTEL_EXPORTER_OTLP_HEADERS: str | None = None
+    # Set to true to also print spans to stdout (local debugging)
+    OTEL_CONSOLE: bool = False
+
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     @property
