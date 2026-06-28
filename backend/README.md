@@ -175,5 +175,3 @@ Payment via Razorpay. Set `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET` in `.env`.
 3. Add PostgreSQL plugin — `DATABASE_URL` is auto-injected
 4. Set environment variables in Railway dashboard
 5. Railway detects `Dockerfile` and deploys automatically
-
-See root `README.md` for full deployment guide.
